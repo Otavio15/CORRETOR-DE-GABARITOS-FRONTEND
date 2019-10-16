@@ -12,18 +12,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  String menssagem = "Nenhum gabarito selecionado";
-  File arquivoCamera;
-  File arquivoGaleria;
+  Color _corMenssagem = Colors.red;
+
+  String _menssagem = "Nenhum gabarito selecionado";
+  File _arquivoCamera;
+  File _arquivoGaleria;
 
   camera() async{
-    arquivoCamera = await ImagePicker.pickImage(source: ImageSource.camera);
-    print("ooo $arquivoCamera");
+    _arquivoCamera = await ImagePicker.pickImage(source: ImageSource.camera);
+    print("ooo $_arquivoCamera");
   }
 
   galeria() async{
-    arquivoGaleria = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print("ooo $arquivoGaleria");
+    _arquivoGaleria = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print("ooo $_arquivoGaleria");
   }
 
   @override
@@ -35,18 +37,20 @@ class _HomeState extends State<Home> {
       ),
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(25),
+        padding: EdgeInsets.only(bottom: 25, left: 25, right: 25, top: 15),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Image.asset("Imagem-reconhecida.jpg", height: 170,),
+              Image.asset("logo.png", height: 170,),
               Padding(
                 padding: EdgeInsets.only(bottom: 15, top: 15),
                 child: Text(
-                    menssagem,
+                    _menssagem,
                     style: TextStyle(
                       fontSize: 22,
+                      color: _corMenssagem,
+                      fontWeight: FontWeight.bold
                     ),
                     textAlign: TextAlign.center,
                 )
@@ -65,6 +69,7 @@ class _HomeState extends State<Home> {
                           child: Icon(
                             Icons.camera_enhance,
                             color: Colors.white,
+                            size: 40,
                           ),
                         ),
                         Padding(
@@ -74,7 +79,7 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     color: Colors.black,
-                    splashColor: Colors.white,
+                    splashColor: Colors.green,
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -89,6 +94,7 @@ class _HomeState extends State<Home> {
                             child: Icon(
                               Icons.folder,
                               color: Colors.white,
+                              size: 40,
                             ),
                           ),
                           Padding(
@@ -98,7 +104,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       color: Colors.black,
-                      splashColor: Colors.white,
+                      splashColor: Colors.green,
                     ),
                   )
                 ],
