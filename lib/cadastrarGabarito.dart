@@ -13,7 +13,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
 
   int _itens = 0;
   List<Questoes> questoes;
-  int _valorGrupo = 1;
+  int _valorGrupo;
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +23,27 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
         backgroundColor: Colors.black,
       ),
       body: Container(
-        padding: EdgeInsets.all(25),
+        padding: EdgeInsets.only(right: 20, left: 20, top: 20, bottom: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 10),
-              child: TextField(
+              child: TextFormField(
                 decoration: InputDecoration(
                     labelText: "Digite o nome do gabarito",
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0)
+                    ),
+                    labelStyle: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 20
+                    )
                 ),
+
               ),
             ),
             Expanded(
@@ -44,7 +55,13 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Text((index+1).toString()),
+                          Text(
+                            (index+1).toString(),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
                           Column(
                             children: <Widget>[
                               Text("A"),
@@ -105,65 +122,73 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                               )
                             ],
                           ),
+                          IconButton(
+                            icon: Icon(Icons.remove_circle, color: Colors.red,),
+                            onPressed: (){},
+                          )
                         ],
                       ),
                     );
                   }
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: RaisedButton(
-                onPressed: (){
-                  setState(() {
-                    _itens += 1;
-                  });
-                  Questoes q = new Questoes(_itens);
-                  questoes.add(q);
-                },
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 5),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+            Row(
+              children: <Widget>[
+                RaisedButton(
+                    onPressed: (){
+                      setState(() {
+                        _itens += 1;
+                      });
+                      Questoes q = new Questoes(_itens);
+                      questoes.add(q);
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          child: Text("Adicionar questão", style: TextStyle(color: Colors.white),),
+                        )
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5, bottom: 5),
-                      child: Text("Adicionar questão", style: TextStyle(color: Colors.white),),
-                    )
-                  ],
-                ),
-                color: Colors.black,
-                splashColor: Colors.green,
-              ),
-            ),
-            RaisedButton(
-              onPressed: (){
-
-              },
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: Icon(
-                      Icons.save,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                    color: Colors.black,
+                    splashColor: Colors.green,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text("Salvar gabarito", style: TextStyle(color: Colors.white),),
-                  )
-                ],
-              ),
-              color: Colors.black,
-              splashColor: Colors.green,
-            ),
+                Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: RaisedButton(
+                    onPressed: (){
+
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Icon(
+                            Icons.save,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          child: Text("Salvar gabarito", style: TextStyle(color: Colors.white),),
+                        )
+                      ],
+                    ),
+                    color: Colors.black,
+                    splashColor: Colors.green,
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
