@@ -11,9 +11,9 @@ class CadastrarGabarito extends StatefulWidget {
 
 class _CadastrarGabaritoState extends State<CadastrarGabarito> {
 
-  int _itens = 1;
-
-
+  int _itens = 0;
+  List<Questoes> questoes;
+  int _valorGrupo = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -44,76 +44,67 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Text(_itens.toString()),
+                          Text((index+1).toString()),
                           Column(
                             children: <Widget>[
                               Text("A"),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value){
-                                  setState(() {
-
-                                  });
-                                },
-                              ),
+                              Radio(
+                                  value: "A",
+                                  groupValue: _valorGrupo,
+                                  onChanged: (escolha){
+                                    _valorGrupo = escolha;
+                                  }
+                              )
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text("B"),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value){
-                                  setState(() {
-
-                                  });
-                                },
-                              ),
+                              Radio(
+                                  value: "B",
+                                  groupValue: _valorGrupo,
+                                  onChanged: (escolha){
+                                    _valorGrupo = escolha;
+                                  }
+                              )
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text("C"),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value){
-                                  setState(() {
-
-                                  });
-                                },
-                              ),
+                              Radio(
+                                  value: "C",
+                                  groupValue: _valorGrupo,
+                                  onChanged: (escolha){
+                                    _valorGrupo = escolha;
+                                  }
+                              )
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text("D"),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value){
-                                  setState(() {
-
-                                  });
-                                },
-                              ),
+                              Radio(
+                                  value: "D",
+                                  groupValue: _valorGrupo,
+                                  onChanged: (escolha){
+                                    _valorGrupo = escolha;
+                                  }
+                              )
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text("E"),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value){
-                                  setState(() {
-
-                                  });
-                                },
-                              ),
+                              Radio(
+                                  value: "E",
+                                  groupValue: _valorGrupo,
+                                  onChanged: (escolha){
+                                    _valorGrupo = escolha;
+                                  }
+                              )
                             ],
                           ),
-                          Icon(
-                            Icons.remove_circle,
-                            color: Colors.red,
-                          )
                         ],
                       ),
                     );
@@ -127,6 +118,8 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                   setState(() {
                     _itens += 1;
                   });
+                  Questoes q = new Questoes(_itens);
+                  questoes.add(q);
                 },
                 child: Column(
                   children: <Widget>[
@@ -173,6 +166,16 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text(
+          _itens.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: Colors.green,
       ),
     );
   }

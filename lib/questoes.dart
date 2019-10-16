@@ -8,6 +8,10 @@ class Questoes{
   bool _questaoD = false;
   bool _questaoE = false;
 
+  Questoes(int _numeroQuestoes){
+    this._numeroQuestoes = numeroQuestoes;
+  }
+
   bool get questaoE => _questaoE;
 
   bool get questaoD => _questaoD;
