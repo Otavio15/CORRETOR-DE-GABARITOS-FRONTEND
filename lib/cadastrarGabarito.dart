@@ -11,9 +11,9 @@ class CadastrarGabarito extends StatefulWidget {
 
 class _CadastrarGabaritoState extends State<CadastrarGabarito> {
 
-  int _itens = 0;
-  List<Questoes> questoes;
-  int _valorGrupo;
+  List<Questao> _questoes = [];
+  var _controller = ScrollController();
+  TextEditingController _nomeController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,14 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
         backgroundColor: Colors.black,
       ),
       body: Container(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 20, bottom: 15),
+        padding: EdgeInsets.only(right: 20, left: 20, top: 15, bottom: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 10),
               child: TextFormField(
+                controller: _nomeController,
                 decoration: InputDecoration(
                     labelText: "Digite o nome do gabarito",
                     focusedBorder: OutlineInputBorder(
@@ -48,7 +49,9 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: _itens,
+                  controller: _controller,
+                  itemCount: _questoes.length,
+                  semanticChildCount: _questoes.length,
                   itemBuilder: (context, index){
                     return Container(
                       padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -58,7 +61,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                           Text(
                             (index+1).toString(),
                             style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold
                             ),
                           ),
@@ -66,10 +69,13 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                             children: <Widget>[
                               Text("A"),
                               Radio(
+                                  activeColor: Colors.green,
                                   value: "A",
-                                  groupValue: _valorGrupo,
+                                  groupValue: _questoes[index].resposta,
                                   onChanged: (escolha){
-                                    _valorGrupo = escolha;
+                                    setState(() {
+                                      _questoes[index].resposta = escolha;
+                                    });
                                   }
                               )
                             ],
@@ -78,10 +84,13 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                             children: <Widget>[
                               Text("B"),
                               Radio(
+                                  activeColor: Colors.green,
                                   value: "B",
-                                  groupValue: _valorGrupo,
+                                  groupValue: _questoes[index].resposta,
                                   onChanged: (escolha){
-                                    _valorGrupo = escolha;
+                                    setState(() {
+                                      _questoes[index].resposta = escolha;
+                                    });
                                   }
                               )
                             ],
@@ -90,10 +99,13 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                             children: <Widget>[
                               Text("C"),
                               Radio(
+                                  activeColor: Colors.green,
                                   value: "C",
-                                  groupValue: _valorGrupo,
+                                  groupValue: _questoes[index].resposta,
                                   onChanged: (escolha){
-                                    _valorGrupo = escolha;
+                                    setState(() {
+                                      _questoes[index].resposta = escolha;
+                                    });
                                   }
                               )
                             ],
@@ -102,10 +114,13 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                             children: <Widget>[
                               Text("D"),
                               Radio(
+                                  activeColor: Colors.green,
                                   value: "D",
-                                  groupValue: _valorGrupo,
+                                  groupValue: _questoes[index].resposta,
                                   onChanged: (escolha){
-                                    _valorGrupo = escolha;
+                                    setState(() {
+                                      _questoes[index].resposta = escolha;
+                                    });
                                   }
                               )
                             ],
@@ -114,17 +129,24 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                             children: <Widget>[
                               Text("E"),
                               Radio(
+                                  activeColor: Colors.green,
                                   value: "E",
-                                  groupValue: _valorGrupo,
+                                  groupValue: _questoes[index].resposta,
                                   onChanged: (escolha){
-                                    _valorGrupo = escolha;
+                                    setState(() {
+                                      _questoes[index].resposta = escolha;
+                                    });
                                   }
                               )
                             ],
                           ),
                           IconButton(
                             icon: Icon(Icons.remove_circle, color: Colors.red,),
-                            onPressed: (){},
+                            onPressed: (){
+                              setState(() {
+                                _questoes.removeAt(index);
+                              });
+                            },
                           )
                         ],
                       ),
@@ -137,10 +159,12 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                 RaisedButton(
                     onPressed: (){
                       setState(() {
-                        _itens += 1;
+                        Questao _questao = new Questao();
+                        _questao.resposta = "";
+                        _questoes.add(_questao);
+                        _controller.animateTo(_controller.offset + 100,
+                            curve: Curves.linear, duration: Duration(milliseconds: 300));
                       });
-                      Questoes q = new Questoes(_itens);
-                      questoes.add(q);
                     },
                     child: Column(
                       children: <Widget>[
@@ -154,7 +178,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 5, bottom: 5),
-                          child: Text("Adicionar questão", style: TextStyle(color: Colors.white),),
+                          child: Text("Adicionar", style: TextStyle(color: Colors.white),),
                         )
                       ],
                     ),
@@ -165,7 +189,20 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                   padding: EdgeInsets.only(left: 5),
                   child: RaisedButton(
                     onPressed: (){
-
+                      if (_nomeController.text.isEmpty){
+                        return showDialog(
+                          context: context,
+                          builder: (context){
+                            return AlertDialog(
+                              backgroundColor: Colors.black,
+                              title: Text("Por favor, digite um nome para o gabarito.", style: TextStyle(color: Colors.white),),
+                            );
+                          }
+                        );
+                      }
+                      else{
+                        
+                      }
                     },
                     child: Column(
                       children: <Widget>[
@@ -179,7 +216,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 5, bottom: 5),
-                          child: Text("Salvar gabarito", style: TextStyle(color: Colors.white),),
+                          child: Text("Salvar", style: TextStyle(color: Colors.white),),
                         )
                       ],
                     ),
@@ -194,7 +231,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Text(
-          _itens.toString(),
+          _questoes.length.toString(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
