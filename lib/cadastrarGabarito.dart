@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gabarito_app/questoes.dart';
 import 'questoes.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
 class CadastrarGabarito extends StatefulWidget {
   @override
@@ -12,8 +16,87 @@ class CadastrarGabarito extends StatefulWidget {
 class _CadastrarGabaritoState extends State<CadastrarGabarito> {
 
   List<Questao> _questoes = [];
+
   var _controller = ScrollController();
+
   TextEditingController _nomeController = new TextEditingController();
+
+  Map<String, dynamic> gabarito;
+
+  _escolherCor(index){
+    if (index % 2 == 0){
+      return Colors.black12;
+    }
+    else{
+      return Colors.white;
+    }
+  }
+
+  _alerta(menssagem){
+    return showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            backgroundColor: Colors.black,
+            title: Text(menssagem, style: TextStyle(color: Colors.white),),
+          );
+        }
+    );
+  }
+
+  Future<File> _getFile() async {
+    final diretorio = await getApplicationDocumentsDirectory();
+    return File( "${diretorio.path}/dados.json" );
+  }
+
+  _salvarArquivo() async {
+
+    var arquivo = await _getFile();
+
+    //Criar dados
+    gabarito = Map();
+
+    for (var i in _questoes){
+      gabarito[i.index.toString()] = i.resposta;
+    }
+
+    String dados = json.encode( {_nomeController.text:gabarito} );
+    arquivo.writeAsString( dados );
+
+    print("Salvo");
+
+  }
+
+  _lerArquivo() async {
+    try{
+      final arquivo = await _getFile();
+      return arquivo.readAsString();
+    }catch(e){
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _lerArquivo().then( (dados){
+      setState(() {
+        gabarito = json.decode(dados);
+        _nomeController.text = gabarito.keys.first;
+        Map <String, dynamic> questoes = gabarito.values.first;
+        int indice = 1;
+        for (var x in questoes.values){
+          Questao q = new Questao();
+          q.index = indice;
+          q.resposta = x;
+          indice += 1;
+          _questoes.add(q);
+        }
+      });
+    } );
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +137,8 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                   semanticChildCount: _questoes.length,
                   itemBuilder: (context, index){
                     return Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      padding: EdgeInsets.only(top: 3, bottom: 2),
+                      color: _escolherCor(index),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -75,6 +159,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                                   onChanged: (escolha){
                                     setState(() {
                                       _questoes[index].resposta = escolha;
+                                      _questoes[index].index = (index+1);
                                     });
                                   }
                               )
@@ -90,6 +175,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                                   onChanged: (escolha){
                                     setState(() {
                                       _questoes[index].resposta = escolha;
+                                      _questoes[index].index = (index+1);
                                     });
                                   }
                               )
@@ -105,6 +191,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                                   onChanged: (escolha){
                                     setState(() {
                                       _questoes[index].resposta = escolha;
+                                      _questoes[index].index = (index+1);
                                     });
                                   }
                               )
@@ -120,6 +207,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                                   onChanged: (escolha){
                                     setState(() {
                                       _questoes[index].resposta = escolha;
+                                      _questoes[index].index = (index+1);
                                     });
                                   }
                               )
@@ -135,6 +223,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                                   onChanged: (escolha){
                                     setState(() {
                                       _questoes[index].resposta = escolha;
+                                      _questoes[index].index = (index+1);
                                     });
                                   }
                               )
@@ -160,7 +249,6 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                     onPressed: (){
                       setState(() {
                         Questao _questao = new Questao();
-                        _questao.resposta = "";
                         _questoes.add(_questao);
                         _controller.animateTo(_controller.offset + 100,
                             curve: Curves.linear, duration: Duration(milliseconds: 300));
@@ -190,18 +278,11 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                   child: RaisedButton(
                     onPressed: (){
                       if (_nomeController.text.isEmpty){
-                        return showDialog(
-                          context: context,
-                          builder: (context){
-                            return AlertDialog(
-                              backgroundColor: Colors.black,
-                              title: Text("Por favor, digite um nome para o gabarito.", style: TextStyle(color: Colors.white),),
-                            );
-                          }
-                        );
+                        _alerta("Por favor, digite um nome para o gabarito.");
                       }
                       else{
-                        
+                        _salvarArquivo();
+                        Navigator.pop(context);
                       }
                     },
                     child: Column(
