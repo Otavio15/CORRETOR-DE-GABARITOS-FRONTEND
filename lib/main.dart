@@ -7,6 +7,7 @@ import 'package:gabarito_app/excluirGabarito.dart';
 import 'package:gabarito_app/home.dart';
 import 'package:gabarito_app/resultados.dart';
 import 'package:gabarito_app/selecionarGabarito.dart';
+import 'resultado.dart';
 
 void main(){
   return runApp(
@@ -18,7 +19,8 @@ void main(){
         "/excluirGabarito" : (context) => ExcluirGabarito(),
         "/editarGabarito" : (context) => EditarGabarito(),
         "/selecionarGabarito" : (context) => SelecionarGabarito(),
-        "/resultados" : (context) => Resultados()
+        "/resultados" : (context) => Resultados(),
+        "/resultado" : (context) => Resultado()
       },
       home: Home(),
     )

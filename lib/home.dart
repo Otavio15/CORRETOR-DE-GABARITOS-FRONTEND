@@ -2,10 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gabarito_app/api.dart';
+import 'package:gabarito_app/resultado.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:path/path.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -25,7 +27,7 @@ class _HomeState extends State<Home> {
     setState(() {
       _imagem = _imgSelecionada;
       if (_imagem.path.isNotEmpty){
-        _menssagem = "Imagem selecionada";
+        _menssagem = "Imagem ${basename(_imagem.path)} selecionada";
         _corMenssagem = Colors.green;
       }
     });
@@ -56,11 +58,11 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(bottom: 15, top: 15),
+                padding: EdgeInsets.only(bottom: 5, top: 5),
                 child: Text(
                     _menssagem,
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 20,
                       color: _corMenssagem,
                       fontWeight: FontWeight.bold
                     ),
@@ -70,6 +72,10 @@ class _HomeState extends State<Home> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Image.asset("logo.png", height: 150),
+                  ),
                   RaisedButton(
                     onPressed: (){
                       _getImage(ImageSource.camera);
@@ -85,7 +91,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          padding: EdgeInsets.only(top: 5,),
                           child: Text("Tirar uma foto", style: TextStyle(color: Colors.white),),
                         )
                       ],
@@ -119,35 +125,11 @@ class _HomeState extends State<Home> {
                       splashColor: Colors.green,
                     ),
                   ),
-                  RaisedButton(
-                    onPressed: (){
-                      _cortarImagem();
-                    },
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Icon(
-                            Icons.content_cut,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 5, bottom: 5),
-                          child: Text("Cortar imagem", style: TextStyle(color: Colors.white),),
-                        )
-                      ],
-                    ),
-                    color: Colors.black,
-                    splashColor: Colors.green,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
-                        Api api = new Api();
-                        api.uploadFile(_imagem);
+                        Resultado r = new Resultado();
+                        r.imagem = _imagem;
+                        Navigator.pushNamed(context, "/resultado");
                       },
                       child: Column(
                         children: <Widget>[
@@ -168,7 +150,6 @@ class _HomeState extends State<Home> {
                       color: Colors.black,
                       splashColor: Colors.green,
                     ),
-                  )
                 ],
               )
             ],
