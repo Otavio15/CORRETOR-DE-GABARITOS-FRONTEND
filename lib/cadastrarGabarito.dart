@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gabarito_app/questoes.dart';
+import 'package:toast/toast.dart';
 import 'questoes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -84,6 +85,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
       setState(() {
         gabarito = json.decode(dados);
         _nomeController.text = gabarito.keys.first;
+
         Map <String, dynamic> questoes = gabarito.values.first;
         int indice = 1;
         for (var x in questoes.values){
@@ -95,7 +97,6 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
         }
       });
     } );
-
   }
 
   @override
@@ -283,6 +284,7 @@ class _CadastrarGabaritoState extends State<CadastrarGabarito> {
                       else{
                         _salvarArquivo();
                         Navigator.pop(context);
+                        Toast.show("Gabarito salvo!", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
                       }
                     },
                     child: Column(

@@ -1,9 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gabarito_app/api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,20 +14,32 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  File _imagem;
+
+  String _menssagem = "Nenhuma imagem selecionada";
   Color _corMenssagem = Colors.red;
 
-  String _menssagem = "Nenhum gabarito selecionado";
-  File _arquivoCamera;
-  File _arquivoGaleria;
+  Future<void> _getImage(ImageSource source) async{
+    File _imgSelecionada = await ImagePicker.pickImage(source: source);
 
-  camera() async{
-    _arquivoCamera = await ImagePicker.pickImage(source: ImageSource.camera);
-    print("ooo $_arquivoCamera");
+    setState(() {
+      _imagem = _imgSelecionada;
+      if (_imagem.path.isNotEmpty){
+        _menssagem = "Imagem selecionada";
+        _corMenssagem = Colors.green;
+      }
+    });
   }
 
-  galeria() async{
-    _arquivoGaleria = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print("ooo $_arquivoGaleria");
+  Future<void> _cortarImagem() async{
+    File _cortar = await ImageCropper.cropImage(
+      sourcePath: _imagem.path,
+      toolbarTitle: "Cortar imagem",
+    );
+
+    setState(() {
+      _imagem = _cortar ?? _imagem;
+    });
   }
 
   @override
@@ -35,14 +49,12 @@ class _HomeState extends State<Home> {
         title: Text("Corretor de gabaritos"),
         backgroundColor: Colors.black,
       ),
-      body: Container(
-        color: Colors.white,
+      body: SingleChildScrollView(
         padding: EdgeInsets.only(bottom: 25, left: 25, right: 25, top: 15),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Image.asset("logo.png", height: 170,),
               Padding(
                 padding: EdgeInsets.only(bottom: 15, top: 15),
                 child: Text(
@@ -60,7 +72,7 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   RaisedButton(
                     onPressed: (){
-                      camera();
+                      _getImage(ImageSource.camera);
                     },
                     child: Column(
                       children: <Widget>[
@@ -82,10 +94,10 @@ class _HomeState extends State<Home> {
                     splashColor: Colors.green,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: RaisedButton(
                       onPressed: (){
-                        galeria();
+                        _getImage(ImageSource.gallery);
                       },
                       child: Column(
                         children: <Widget>[
@@ -100,6 +112,56 @@ class _HomeState extends State<Home> {
                           Padding(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             child: Text("Procurar imagens na galeria", style: TextStyle(color: Colors.white),),
+                          )
+                        ],
+                      ),
+                      color: Colors.black,
+                      splashColor: Colors.green,
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: (){
+                      _cortarImagem();
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Icon(
+                            Icons.content_cut,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          child: Text("Cortar imagem", style: TextStyle(color: Colors.white),),
+                        )
+                      ],
+                    ),
+                    color: Colors.black,
+                    splashColor: Colors.green,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: RaisedButton(
+                      onPressed: (){
+                        Api api = new Api();
+                        api.uploadFile(_imagem);
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 5),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            child: Text("Corrigir gabarito", style: TextStyle(color: Colors.white),),
                           )
                         ],
                       ),
@@ -153,7 +215,7 @@ class _HomeState extends State<Home> {
               onTap: (){
                 Navigator.pushNamed(context, "/resultados");
               }
-          )
+          ),
         ],
       )
     );
