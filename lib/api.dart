@@ -34,7 +34,7 @@ class Api{
 
       FormData formdata = new FormData(); // just like JS
 
-      formdata.add("image", new UploadFileInfo(image, basename(image.path)));
+      formdata.add("image", new UploadFileInfo(image, basename("gabarito.png")));
 
       dio.post(_url+"/upload",
           data: formdata,

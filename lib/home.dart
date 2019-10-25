@@ -154,7 +154,7 @@ class _HomeState extends State<Home> {
                           Padding(
                             padding: EdgeInsets.only(top: 5),
                             child: Icon(
-                              Icons.search,
+                              Icons.done,
                               color: Colors.white,
                               size: 40,
                             ),
