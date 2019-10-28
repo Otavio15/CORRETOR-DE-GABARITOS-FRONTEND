@@ -59,14 +59,14 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(bottom: 5, top: 5),
-                child: Text(
-                    _menssagem,
-                    style: TextStyle(
+                child:Text(
+                  _menssagem,
+                  style: TextStyle(
                       fontSize: 20,
                       color: _corMenssagem,
                       fontWeight: FontWeight.bold
-                    ),
-                    textAlign: TextAlign.center,
+                  ),
+                  textAlign: TextAlign.center,
                 )
               ),
               Column(

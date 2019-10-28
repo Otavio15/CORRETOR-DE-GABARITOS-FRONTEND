@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 
 class Api{
 
-    String _url = "http://192.168.1.16:5000";
+    String _url = "http://192.168.0.126:5000";
 
     Future<String> capturarGabarito() async {
     final response = await http.get('$_url/resultado');
@@ -32,7 +32,7 @@ class Api{
 
       FormData formdata = new FormData(); // just like JS
 
-      formdata.add("image", new UploadFileInfo(image, "gabarito.png"));
+      formdata.add("image", new UploadFileInfo(image, "gabarit.png"));
 
       var result = await dio.post(_url+"/upload",
           data: formdata,
