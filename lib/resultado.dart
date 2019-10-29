@@ -42,6 +42,7 @@ class _ResultadoState extends State<Resultado> {
 
   Map<String, dynamic> gabarito;
   List<Questao> _questoes = [];
+  int _acertos = 0;
 
   _getResultado(snapshot) async{
     Map<String, dynamic> dados = json.decode(snapshot);
@@ -56,25 +57,42 @@ class _ResultadoState extends State<Resultado> {
 
   _ordenarLista(List<Questao> lista){
     List <Questao> listAux = [];
-    for (var i = 0; i < lista.length; i++){
-      Questao q = new Questao();
+    for (var i = 1; i < lista.length+1; i++){
       for (var dado in lista){
         if (i == dado.index){
-          q.index = i;
-          q.resposta = lista[i].resposta;
+          Questao q = new Questao();
+          q.index = dado.index;
+          q.resposta = dado.resposta;
           print("key ${q.index}, value ${q.resposta}");
           listAux.add(q);
+          break;
         }
       }
     }
+    _resultadoAluno = listAux;
+  }
+
+  _calcularNota(){
+    double nota = (_acertos*100)/_resultadoAluno.length;
+    return nota;
   }
 
   _Icones(valor1, valor2){
     if (valor1 == valor2){
+      _acertos++;
       return Icon(Icons.done, color: Colors.green,);
     }
     else{
       return Icon(Icons.close, color: Colors.red,);
+    }
+  }
+
+  _escolherCor(index){
+    if (index % 2 == 0){
+      return Colors.black12;
+    }
+    else{
+      return Colors.white;
     }
   }
 
@@ -133,7 +151,8 @@ class _ResultadoState extends State<Resultado> {
                               child: ListView.builder(
                                   itemCount: _questoes.length,
                                   itemBuilder: (context, index){
-                                    return SingleChildScrollView(
+                                    return Container(
+                                      color: _escolherCor(index),
                                       padding: EdgeInsets.only(bottom: 10, top: 10),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -141,7 +160,7 @@ class _ResultadoState extends State<Resultado> {
                                           Text((index+1).toString(), style: TextStyle(fontSize: 22),),
                                           Text(
                                             "Resultado do sistema:    ${_questoes[index].resposta} \n"
-                                                "Resultado aluno: ${_resultadoAluno[index].index} | ${_resultadoAluno[index].resposta}",
+                                                "Resultado aluno: ${_resultadoAluno[index].resposta}",
                                             style: TextStyle(
                                               fontSize: 20,
                                             ),
@@ -153,6 +172,18 @@ class _ResultadoState extends State<Resultado> {
                                   }
                               ),
                             ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.black,
+                              child: Text(
+                                  "O aluno(a) conseguiu obter ${_calcularNota().toString()}% na sua avaliação.",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.center,
+                              ),
+                            )
                           ],
                         );
                     }
