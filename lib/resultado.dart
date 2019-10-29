@@ -42,7 +42,6 @@ class _ResultadoState extends State<Resultado> {
 
   Map<String, dynamic> gabarito;
   List<Questao> _questoes = [];
-  int _acertos = 0;
 
   _getResultado(snapshot) async{
     Map<String, dynamic> dados = json.decode(snapshot);
@@ -72,14 +71,20 @@ class _ResultadoState extends State<Resultado> {
     _resultadoAluno = listAux;
   }
 
-  _calcularNota(){
-    double nota = (_acertos*100)/_resultadoAluno.length;
-    return nota;
+  _calcularNota() async{
+    int _acertos = 0;
+    for (var i = 0; i < _questoes.length; i++){
+      if (_questoes[i].resposta == _resultadoAluno[i].resposta){
+        _acertos += 1;
+      }
+    }
+    double nota = await (_acertos*100)/_resultadoAluno.length;
+    print("Nota: ${nota}, acertos ${_acertos}, total ${_resultadoAluno.length}");
+    return nota.toStringAsFixed(2);
   }
 
   _Icones(valor1, valor2){
     if (valor1 == valor2){
-      _acertos++;
       return Icon(Icons.done, color: Colors.green,);
     }
     else{
@@ -175,14 +180,25 @@ class _ResultadoState extends State<Resultado> {
                             Container(
                               padding: EdgeInsets.all(10),
                               color: Colors.black,
-                              child: Text(
-                                  "O aluno(a) conseguiu obter ${_calcularNota().toString()}% na sua avaliação.",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.center,
-                              ),
+                              child: FutureBuilder<dynamic>(
+                                future: _calcularNota(),
+                                builder: (context, snapshot){
+                                  switch (snapshot.connectionState){
+                                    case ConnectionState.active:
+                                    case ConnectionState.none:
+                                    case ConnectionState.waiting:
+                                    case ConnectionState.done:
+                                      return Text(
+                                        "O aluno conseguiu obter ${snapshot.data}% da nota.",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      );
+                                  }
+                                },
+                              )
                             )
                           ],
                         );
