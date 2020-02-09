@@ -1,16 +1,11 @@
-# gabarito_app
+# Software para correção de gabaritos 
 
-A new Flutter application.
+A parte **back-end** do sistema de correção de gabaritos foi desenvolvido utilizando a linguagem de programação **Python** e a biblioteca **OpenCV**, e a **API** para se comunicar com o front-end foi desenvolvido utilizando a biblioteca **Flask** da linguagem de programação **Python**.
 
-## Getting Started
+Este sistema foi desenvolvido como Trabalho de Conclusão de Curso (TCC) para obtenção do diploma de bacharel em Sistemas de Informação.
 
-This project is a starting point for a Flutter application.
+O **front-end** foi desenvolvido utilizando o framework **flutter** e a linguagem de programação **Dart**. O módulo de comunicação com o servidor foi desenvolvido utilizando a biblioteca **LIB-DIO** da linguagem **Dart**.
 
-A few resources to get you started if this is your first Flutter project:
+## Link para o material completo do sistema.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://drive.google.com/file/d/12xuWXb5PsLNDZq0D1YyVKoLXalXtxD_Q/view?usp=sharing
