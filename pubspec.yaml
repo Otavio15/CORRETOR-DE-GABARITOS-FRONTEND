@@ -28,7 +28,7 @@ dependencies:
   flutter_speed_dial: ^1.2.1
   path_provider:
   toast: ^0.1.5
-  dio:
+  dio: any
 
 dev_dependencies:
   flutter_test:
